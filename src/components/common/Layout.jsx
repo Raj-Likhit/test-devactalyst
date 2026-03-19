@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef, Suspense, lazy } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import Navigation from './Navigation';
 import { ScrollProgress, ScrollToTop } from '../ui/scroll-progress';
 import { useSmoothScroll } from '../../hooks/useScrollEffects';
 import { CtaButton } from '../ui/cta-button';
 import OpeningOrchestrator from '../ui/opening-orchestrator';
-
-const StarsCanvasLazy = lazy(() => import('../ui/stars-canvas').then(m => ({ default: m.StarsCanvas })));
+import AntiGravityCanvas from '../ui/anti-gravity-canvas';
 
 const Layout = ({ children, stars = {} }) => {
   const location = useLocation();
@@ -176,17 +175,9 @@ const Layout = ({ children, stars = {} }) => {
       {/* Opening Orchestrator (very light, CSS-driven) */}
       <OpeningOrchestrator />
 
-      <Suspense fallback={null}>
-        {starsConfig.enabled && (
-          <>
-            {(() => {
-              return (
-                <StarsCanvasLazy {...starsConfig} />
-              );
-            })()}
-          </>
-        )}
-      </Suspense>
+      {starsConfig.enabled && (
+        <AntiGravityCanvas className={starsConfig.className} />
+      )}
 
       {/* Futuristic background overlays */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -245,7 +236,9 @@ const Layout = ({ children, stars = {} }) => {
                           if (onComponents) {
                             try {
                               window.dispatchEvent(new CustomEvent('dc_open_components', { detail: { action: 'scroll' } }));
-                            } catch (_) {}
+                            } catch (_) {
+                              // Ignore mobile nav event dispatch errors
+                            }
                           } else {
                             navigate('/components');
                           }
