@@ -7,9 +7,9 @@ import { TubeLightNavBarDemo } from '../components/ui/tubelight-navbar-demo';
 import { LiquidButton } from '../components/ui/liquid-glass-button';
 import { Modal } from '@/components/ui/modal';
 import { CtaButton } from '@/components/ui/cta-button';
-import { GradientButton } from '@/components/ui/gradient-button';
-import { ScrollProgress, ScrollToTop } from '@/components/ui/scroll-progress';
 import { StarBorder } from '@/components/ui/star-border';
+import DemoOne from '../components/ui/demo';
+import DemoTwo from '../components/ui/demo2';
 import { Helmet } from 'react-helmet-async';
 
 const Components = () => {
@@ -114,6 +114,26 @@ const Components = () => {
       color: 'from-slate-900 to-slate-800',
       icon: <NavigationIcon className="w-12 h-12 text-cyan-300" />,
     },
+    {
+      id: 'shader-lines',
+      name: 'Shader Lines',
+      category: 'backgrounds',
+      description: 'Animated WebGL shader background powered by Three.js',
+      features: ['Three.js integration', 'Custom shader', 'Responsive layout'],
+      demo: 'shader-lines-demo',
+      color: 'from-slate-900 to-slate-800',
+      icon: <Sparkles className="w-12 h-12 text-cyan-300" />,
+    },
+    {
+      id: 'crystal-shader',
+      name: 'Crystal Synthesis',
+      category: 'backgrounds',
+      description: 'Interactive Voronoi crystal shader responsive to mouse movements',
+      features: ['Raw WebGL implementation', 'Interactive controls', 'Fluid animations'],
+      demo: 'crystal-shader-demo',
+      color: 'from-slate-900 to-slate-800',
+      icon: <Sparkles className="w-12 h-12 text-purple-400" />,
+    },
   ];
 
   const demoComponents = {
@@ -123,6 +143,8 @@ const Components = () => {
     'gradient-button': <GradientButtonDemo />,
     'star-border': <StarBorderDemo />,
     'scroll-progress': <ScrollProgressDemo />,
+    'shader-lines-demo': <ShaderLinesDemoWrapper />,
+    'crystal-shader-demo': <CrystalShaderDemoWrapper />,
   };
 
   React.useEffect(() => {
@@ -532,5 +554,33 @@ const ScrollProgressDemo = () => {
     </div>
   );
 };
+
+const ShaderLinesDemoWrapper = () => (
+  <div className="relative min-h-[70vh] p-6">
+    <div className="max-w-5xl mx-auto space-y-4">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold">Shader Lines</h2>
+        <p className="text-slate-300 mt-2">Custom GLSL fragment shader background built with Three.js.</p>
+      </div>
+      <div className="dc-card p-0 overflow-hidden">
+        <DemoOne />
+      </div>
+    </div>
+  </div>
+);
+
+const CrystalShaderDemoWrapper = () => (
+  <div className="relative min-h-[80vh] p-6 lg:ml-12 lg:mr-12">
+    <div className="max-w-5xl mx-auto space-y-4">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold">Crystal Synthesis Base</h2>
+        <p className="text-slate-300 mt-2">Voronoi math driven WebGL shader with customizable parameter sliders.</p>
+      </div>
+      <div className="dc-card p-0 overflow-hidden" style={{ minHeight: '650px' }}>
+        <DemoTwo />
+      </div>
+    </div>
+  </div>
+);
 
 export default Components;

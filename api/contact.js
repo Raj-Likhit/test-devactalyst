@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   try {
     const data = ContactSchema.parse(req.body || {});
-    // In a real app, persist or forward the sanitized payload here
+
     const payload = {
       name: sanitize(data.name),
       email: sanitize(data.email),
@@ -26,12 +26,33 @@ export default async function handler(req, res) {
       receivedAt: new Date().toISOString(),
     };
 
-  // Example: server-side logging
-  console.log('contact_submission', payload);
+    // --- NEW GOOGLE SHEETS FORWARDING LOGIC ---
+    // 1. Paste your Google Web App URL here
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxtCysmjMVjAQjJJHDUEgorxuRG08eqEOgLqCl1kXhBJOEWo2Pzh_qizVKIiCaq004_/exec";
 
+    // 2. Format the data so Google Apps Script can read it easily
+    const formBody = new URLSearchParams();
+    formBody.append("Name", payload.name);
+    formBody.append("Email", payload.email);
+    formBody.append("Subject", payload.subject);
+    formBody.append("Message", payload.message);
+
+    // 3. Send the data to Google
+    const googleResponse = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      body: formBody,
+    });
+
+    if (!googleResponse.ok) {
+      throw new Error('Failed to forward data to Google Sheets');
+    }
+    // ------------------------------------------
+
+    console.log('contact_submission forwarded successfully', payload);
     return res.status(200).json({ ok: true });
+
   } catch (err) {
-    const message = err?.errors?.[0]?.message || 'Invalid input';
+    const message = err?.errors?.[0]?.message || err.message || 'Invalid input';
     return res.status(400).json({ error: message });
   }
 }
