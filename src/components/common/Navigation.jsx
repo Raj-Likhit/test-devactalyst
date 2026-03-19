@@ -49,7 +49,7 @@ const Navigation = ({ demoMode = false }) => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
+    { name: 'Projects', path: '/projects' },
     { name: 'Workshops', path: '/workshops' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Team', path: '/team' },
