@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Sparkles } from 'lucide-react';
 import Navigation from './Navigation';
 import { ScrollProgress, ScrollToTop } from '../ui/scroll-progress';
 import { useSmoothScroll } from '../../hooks/useScrollEffects';
-import { Sparkles } from 'lucide-react';
-import { CtaButton } from '@/components/ui/cta-button';
+import { CtaButton } from '../ui/cta-button';
 import OpeningOrchestrator from '../ui/opening-orchestrator';
 
-import { AntiGravityCanvas } from '../ui/anti-gravity-canvas';
+const StarsCanvasLazy = lazy(() => import('../ui/stars-canvas').then(m => ({ default: m.StarsCanvas })));
 
 const Layout = ({ children, stars = {} }) => {
   const location = useLocation();
@@ -176,9 +176,17 @@ const Layout = ({ children, stars = {} }) => {
       {/* Opening Orchestrator (very light, CSS-driven) */}
       <OpeningOrchestrator />
 
-      {starsConfig.enabled && (
-        <AntiGravityCanvas className={starsConfig.className} />
-      )}
+      <Suspense fallback={null}>
+        {starsConfig.enabled && (
+          <>
+            {(() => {
+              return (
+                <StarsCanvasLazy {...starsConfig} />
+              );
+            })()}
+          </>
+        )}
+      </Suspense>
 
       {/* Futuristic background overlays */}
       <div className="fixed inset-0 pointer-events-none z-0">
