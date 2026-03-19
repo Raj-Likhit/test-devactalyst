@@ -21,7 +21,9 @@ const Navigation = ({ demoMode = false }) => {
     setMobileMenuOpen(open);
     try {
       window.dispatchEvent(new CustomEvent('dc_mobile_nav', { detail: { open } }));
-    } catch (_) {}
+    } catch (_) {
+      // Ignore mobile nav event dispatch errors
+    }
   };
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const Navigation = ({ demoMode = false }) => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
+    { name: 'Projects', path: '/projects' },
     { name: 'Workshops', path: '/workshops' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Team', path: '/team' },

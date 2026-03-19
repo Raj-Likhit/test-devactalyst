@@ -10,6 +10,8 @@ import { CtaButton } from '@/components/ui/cta-button';
 import { StarBorder } from '@/components/ui/star-border';
 import DemoOne from '../components/ui/demo';
 import DemoTwo from '../components/ui/demo2';
+import { GradientButton } from '../components/ui/gradient-button';
+import { ScrollProgress, ScrollToTop } from '../components/ui/scroll-progress';
 import { Helmet } from 'react-helmet-async';
 
 const Components = () => {
