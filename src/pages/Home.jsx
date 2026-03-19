@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Code, Users, Rocket, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Code, Users, Rocket, Sparkles, ArrowRight } from 'lucide-react';
 import Layout from '../components/common/Layout';
 import { DevCatalystHeroScroll } from '../components/DevCatalystHeroScroll';
-import { AntiGravityCanvas } from '../components/ui/anti-gravity-canvas';
+import { StarsCanvas } from '../components/ui/stars-canvas';
 import { GradientButton } from '../components/ui/gradient-button';
 import { GradientText } from '../components/ui/animated-hero';
 import { CtaButton } from '@/components/ui/cta-button';
+import DemoOne from '../components/ui/demo';
 import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
@@ -23,16 +24,42 @@ const Home = () => {
     if (alreadyShown) {
       setIsLoading(false);
       setShowContent(true);
+      return;
     }
 
+    // Fallback timeout to show content if anime.js doesn't load (4 second max)
+    const fallbackTimeout = setTimeout(() => {
+      setIsLoading(false);
+      setShowContent(true);
+      try {
+        sessionStorage.setItem('dc_loading_shown', '1');
+      } catch (e) {
+        void e; // ignore
+      }
+    }, 4000);
 
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js';
     script.async = true;
-    script.onload = () => initAnimations();
+    script.onload = () => {
+      clearTimeout(fallbackTimeout);
+      initAnimations();
+    };
+    script.onerror = () => {
+      // If anime.js fails to load, show content anyway
+      clearTimeout(fallbackTimeout);
+      setIsLoading(false);
+      setShowContent(true);
+      try {
+        sessionStorage.setItem('dc_loading_shown', '1');
+      } catch (e) {
+        void e; // ignore
+      }
+    };
     document.body.appendChild(script);
 
     return () => {
+      clearTimeout(fallbackTimeout);
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
@@ -111,11 +138,19 @@ const Home = () => {
         <title>DevCatalyst | Home</title>
         <meta name="description" content="Student-led developer community: build real projects, get mentorship, and grow your career." />
       </Helmet>
-      {/* Loading Screen */}
       {isLoading && (
         <div className="loading-screen fixed inset-0 z-[100] bg-[#060e1a] flex items-center justify-center overflow-hidden">
           {/* Stars Background for Loading */}
-          <AntiGravityCanvas className="z-0" />
+          <div className="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none z-0">
+            <StarsCanvas
+              transparent
+              withinContainer
+              maxStars={800}
+              speedMultiplier={0.8}
+              twinkleIntensity={25}
+              className="z-0"
+            />
+          </div>
           <div className="relative flex flex-col items-center justify-center z-10">
             <motion.div
               className="loading-logo mb-12 opacity-0 relative"
@@ -250,7 +285,6 @@ const Home = () => {
 
           {/* Hero Scroll Demo Section */}
           <DevCatalystHeroScroll />
-
 
           {/* Features Preview */}
           <section className="relative py-20 px-6">

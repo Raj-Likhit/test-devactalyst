@@ -5,7 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 // Pages
 import Home from './pages/Home';
-import Projects from './pages/Projects';
+import About from './pages/About';
 import Workshops from './pages/Workshops';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
@@ -19,7 +19,7 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/about" element={<About />} />
             <Route path="/workshops" element={<Workshops />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/team" element={<Team />} />
